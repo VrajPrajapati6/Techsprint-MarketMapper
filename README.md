@@ -1,160 +1,198 @@
-🚀 MarketMapper AI
+# 🚀 MarketMapper AI
 
-Predict business success before you invest a single rupee
+**Predict business success before you invest a single rupee**
 
-MarketMapper AI is an AI-powered business feasibility and location intelligence platform that helps entrepreneurs, startups, and decision-makers evaluate whether a business idea will succeed at a specific location — using real-time Google Maps data and Gemini AI reasoning.
+MarketMapper AI is an **AI-powered business feasibility & location intelligence platform** that helps entrepreneurs, startups, and decision-makers evaluate whether a business idea will succeed at a **specific location** — using **real-time Google Maps data** and **Gemini AI reasoning**.
 
-💡 Problem Statement
+This platform transforms **raw location data into clear Go / No-Go decisions**, reducing business failure caused by guesswork and outdated surveys.
 
-Starting a new business often relies on guesswork, outdated surveys, and incomplete market data, leading to high failure rates. Entrepreneurs lack:
+---
 
-Real-time competitor insights
+## 💡 Problem Statement
 
-Accurate footfall analysis
+Starting a new business often relies on assumptions rather than evidence, leading to high failure rates. Entrepreneurs and investors lack:
 
-Clear Go / No-Go decisions
+- ❌ Real-time competitor insights  
+- ❌ Accurate footfall analysis  
+- ❌ Market gap detection  
+- ❌ Clear feasibility decisions  
 
-🧠 Our Solution – MarketMapper AI
+Traditional market research is **slow, expensive, and outdated**.
 
-MarketMapper AI transforms raw location data into actionable business decisions using Google’s ecosystem and AI intelligence.
+---
 
-🎯 What It Does
+## 🧠 Our Solution – MarketMapper AI
 
-Predicts business success probability
+MarketMapper AI leverages **Google’s ecosystem and Gemini AI** to deliver **data-backed business decisions**.
 
-Identifies high-potential & risky locations
+It analyzes **competition density, footfall trends, activity patterns, and demand gaps** to predict whether a business idea will succeed at a specific location.
 
-Detects market gaps and overcrowding
+---
 
-Provides clear feasibility reports
+## 🎯 What It Does
 
-🔄 How It Works (4-Step Process)
-1️⃣ Smart Input (Data Injection)
+- 📊 Predicts **business success probability**
+- 🗺️ Identifies **high-potential & risky locations**
+- 🔍 Detects **market gaps & underserved zones**
+- 🚨 Alerts against **overcrowded markets**
+- 📄 Generates **actionable feasibility reports**
 
-User selects location and business type
+---
 
-Google Maps captures geographic context
+## 🔄 System Flow (4-Step Process)
 
-Google Places API:
+### 1️⃣ Smart Input (Data Injection)
 
-Finds nearby competitors
+- User selects:
+  - 📍 Location on the map  
+  - 🏪 Business category (e.g., Café, Gym, Pharmacy)
 
-Identifies categories & density
+- **Google Maps JavaScript API**
+  - Captures geographic & spatial context
 
-Collects ratings & price levels
+- **Google Places API**
+  - Discovers nearby competitors  
+  - Identifies business categories & density  
+  - Collects ratings, reviews & price levels  
 
-2️⃣ The Intelligence (AI Core)
+---
 
-Powered by Gemini AI, the system:
+### 2️⃣ The Intelligence (AI Core)
 
-Analyzes competition intensity
+Powered by **Gemini AI**, the system:
 
-Studies real-world footfall patterns
+- Analyzes **competition intensity**
+- Studies **real-world footfall patterns**
+- Evaluates **peak hours & activity trends**
+- Detects **underserved market gaps**
+- Calculates **business risk & success probability**
 
-Evaluates peak hours & activity trends
+---
 
-Detects underserved market gaps
+### 3️⃣ Killer Features – Seeing What Others Miss
 
-Assesses business risk & success probability
+#### 🔍 Gap Finder
+- Identifies **high-demand, low-competition** zones  
+- Highlights **missing business categories**
 
-3️⃣ Killer Features – Seeing What Others Miss
+#### 🚨 Cannibalization Alert
+- Detects **overcrowded markets**
+- Warns users before **high-risk investments**
 
-🔍 Gap Finder
-Identifies missing business categories and high-demand, low-competition zones
+#### 🗺️ AI Heatmap Visualization
+- Location-wise success probability:
+  - 🔴 **Red** → High potential  
+  - 🔵 **Blue** → Low potential  
 
-🚨 Cannibalization Alert
-Detects overcrowded markets and warns against high-risk investments
+---
 
-🗺️ AI Heatmap Visualization
-Color-coded success probability map
+### 4️⃣ The Verdict (Actionable Output)
 
-🔴 Red → High potential
+- 📊 **Feasibility Score**
+- 🗺️ **AI-powered success heatmap**
+- ⏰ **Optimal operating hours**
+- ✅ **Go / ❌ No-Go decision guidance**
+- 📄 **Complete business feasibility report**
 
-🔵 Blue → Low potential
+---
 
-4️⃣ The Verdict (Actionable Output)
+## 📸 Screenshots
 
-📊 Feasibility Score
+### 🌐 Landing Page – MarketMapper AI
+*AI-powered platform introduction with core value proposition*
+<img width="1900" alt="MarketMapper Landing Page" src="./screenshots/landing-page.jpeg" />
 
-🗺️ AI-powered success heatmap
+---
 
-⏰ Optimal operating hours
+### 📊 User Dashboard
+*Personalized dashboard showing reports, top regions, and analysis history*
+<img width="1900" alt="MarketMapper Dashboard" src="./screenshots/dashboard.jpeg" />
 
-✅ Go / ❌ No-Go decision guidance
+---
 
-📄 Complete business feasibility report
+### 🧠 AI Market Analysis Report
+*Neural intelligence report with market potential score, competitor density, and Gemini insights*
+<img width="1900" alt="AI Market Analysis Report" src="./screenshots/analysis-report.jpeg" />
 
-🛠️ Google Technologies Used
-Technology	Purpose
-Google Maps JavaScript API	Interactive maps & heatmaps
-Google Places API	Competitor discovery & density analysis
-Places Insights API	Real-world footfall trends
-Gemini 3 Flash	AI market analysis engine
-Google Cloud Platform (GCP)	Scalable backend & processing
-Google Ecosystem	Seamless end-to-end integration
-🏆 Why MarketMapper AI Wins
+---
 
-“Not just data, but decisions.”
+### 🗺️ Opportunities, Threats & Expansion Strategy
+*AI-generated opportunities, risk analysis, and city expansion recommendations*
+<img width="1900" alt="Market Opportunities and Threats" src="./screenshots/opportunities-threats.jpeg" />
 
-❌ Traditional Methods
+---
 
-Static & outdated market data
+## 🛠️ Google Technologies Used
 
-Manual, time-consuming surveys
+| Technology | Purpose |
+|-----------|--------|
+| Google Maps JavaScript API | Interactive maps & heatmaps |
+| Google Places API | Competitor discovery & density analysis |
+| Places Insights API | Real-world footfall trends |
+| Gemini 3 Flash | AI market analysis engine |
+| Google Cloud Platform (GCP) | Scalable backend & processing |
+| Google Ecosystem | End-to-end seamless integration |
 
-No real footfall insights
+---
 
-Decisions based on assumptions
+## 🏆 Why MarketMapper AI Wins
 
-✅ MarketMapper AI
+> **“Not just data, but decisions.”**
 
-Real-time Google Maps & Places data
+### ❌ Traditional Methods
+- Static & outdated data  
+- Manual surveys  
+- No real footfall insights  
+- Assumption-based decisions  
 
-AI-driven reasoning with Gemini
+### ✅ MarketMapper AI
+- Real-time Google Maps & Places data  
+- AI-driven reasoning using Gemini  
+- Visual heatmap-based clarity  
+- Clear Go / No-Go recommendations  
 
-Visual heatmap-based clarity
+---
 
-Clear, actionable business decisions
+## 🌍 Real-World Impact
 
-🌍 Real-World Impact
-🚀 Startups & SMBs
+### 🚀 Startups & SMBs
+- Reduced business failure rates  
+- Smarter investment decisions  
 
-Reduce failure rates
+### 🏙️ Smart Cities
+- Data-driven urban planning  
+- Optimized business zoning  
 
-Smarter investment decisions
+### 💰 Financial & Rental Analysis
+- Revenue prediction  
+- Rental feasibility insights  
 
-🏙️ Smart Cities
+### 🏛️ Government & Policy Makers
+- Policy planning  
+- Economic development support  
 
-Data-driven urban planning
+---
 
-Business zoning optimization
+## 🔮 Future Scope
 
-💰 Financial & Rental Analysis
+- 📈 Revenue forecasting models  
+- 🏠 Rental cost optimization  
+- 🌆 Multi-city comparative analysis  
+- 🏭 Industry-specific AI models  
+- 📊 Enterprise & government dashboards  
 
-Revenue prediction
+---
 
-Rental feasibility insights
+## 📌 Tagline
 
-🏛️ Government Use
+**MarketMapper AI — Turning locations into opportunities**
 
-Policy planning
+---
 
-Economic development support
+## 📦 Installation & Setup (Prototype)
 
-🔮 Future Scope
-
-Revenue forecasting models
-
-Rental cost optimization
-
-Multi-city comparative analysis
-
-Industry-specific AI models
-
-Government & enterprise dashboards
-
-
-
-📌 Tagline
-
-MarketMapper AI — Turning locations into opportunities
+```bash
+git clone https://github.com/<your-username>/marketmapper-ai.git
+cd marketmapper-ai
+npm install
+npm start
