@@ -100,29 +100,25 @@ Powered by **Gemini AI**, the system:
 
 ### 🌐 Landing Page – MarketMapper AI
 *AI-powered platform introduction with core value proposition*
-<img width="1900" alt="MarketMapper Landing Page" src="(https://github.com/user-attachments/assets/ac279a15-0d61-4a5e-9b62-5ae6d8f1e8c2)
-" />
+<img width="1900" alt="MarketMapper Landing Page" src="https://github.com/user-attachments/assets/ac279a15-0d61-4a5e-9b62-5ae6d8f1e8c2" />
 
 ---
 
 ### 📊 User Dashboard
 *Personalized dashboard showing reports, top regions, and analysis history*
-<img width="1900" alt="MarketMapper Dashboard" src="(https://github.com/user-attachments/assets/57c0e177-0f9f-4db9-ac71-11f3085d3e34)
-" />
+<img width="1900" alt="MarketMapper Dashboard" src="https://github.com/user-attachments/assets/57c0e177-0f9f-4db9-ac71-11f3085d3e34" />
 
 ---
 
 ### 🧠 AI Market Analysis Report
 *Neural intelligence report with market potential score, competitor density, and Gemini insights*
-<img width="1900" alt="AI Market Analysis Report" src="(https://github.com/user-attachments/assets/344f32b3-496d-403d-8159-4f8bf1c61869)
-" />
+<img width="1900" alt="AI Market Analysis Report" src="https://github.com/user-attachments/assets/344f32b3-496d-403d-8159-4f8bf1c61869" />
 
 ---
 
 ### 🗺️ Opportunities, Threats & Expansion Strategy
 *AI-generated opportunities, risk analysis, and city expansion recommendations*
-<img width="1900" alt="Market Opportunities and Threats" src="(https://github.com/user-attachments/assets/2cff5d64-4ef3-442a-8b4c-337cc4fae589)
-" />
+<img width="1900" alt="Market Opportunities and Threats" src="https://github.com/user-attachments/assets/2cff5d64-4ef3-442a-8b4c-337cc4fae589" />
 
 ---
 
