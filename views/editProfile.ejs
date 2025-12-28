@@ -1,0 +1,206 @@
+<% layout('layouts/boilerplate') -%>
+
+<style>
+    body { background: #000; overflow-x: hidden; }
+    
+    .edit-wrapper {
+        padding-top: 120px;
+        min-height: 90vh;
+        background: radial-gradient(circle at top center, rgba(168, 85, 247, 0.15), transparent 70%);
+    }
+
+    .edit-card {
+        background: rgba(13, 13, 13, 0.8);
+        backdrop-filter: blur(25px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 35px;
+        padding: 50px 40px;
+        transition: border-color 0.3s ease;
+    }
+
+    .edit-card:hover {
+        border-color: rgba(168, 85, 247, 0.4);
+    }
+
+    .info-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: #a855f7;
+        font-weight: 800;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    /* Custom Styled Input to match Neural Boxes */
+    .neural-input {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 18px;
+        padding: 15px 20px;
+        color: #fff;
+        font-size: 1.1rem;
+        width: 100%;
+        transition: all 0.3s ease;
+        outline: none;
+    }
+
+    .neural-input:focus {
+        border-color: #a855f7;
+        background: rgba(168, 85, 247, 0.05);
+        box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+    }
+
+    .action-btn {
+        padding: 14px;
+        border-radius: 18px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        transition: 0.3s;
+        text-decoration: none;
+        display: block;
+        width: 100%;
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    .btn-update {
+        background: #a855f7;
+        color: white;
+        border: none;
+        box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+    }
+
+    .btn-update:hover {
+        background: #9333ea;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
+    }
+
+    .btn-cancel {
+        background: transparent;
+        color: rgba(255, 255, 255, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-cancel:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.05);
+    }
+</style>
+
+<div class="edit-wrapper">
+  <canvas
+    id="glitterCanvas"
+    style="
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    "
+  ></canvas>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-7">
+                <div class="edit-card">
+                    <div class="text-center mb-5">
+                        <div class="mb-3">
+                            <i class="fa-solid fa-user-pen fa-3x" style="color: #a855f7;"></i>
+                        </div>
+                        <h2 class="text-white fw-bold">Update Identity</h2>
+                        <p class="text-secondary small">Modify your neural signature</p>
+                    </div>
+
+                    <form action="/profile/update" method="POST">
+                        <div class="mb-5">
+                            <label for="username" class="info-label">New Username</label>
+                            <input 
+                                type="text" 
+                                id="username" 
+                                name="username" 
+                                class="neural-input" 
+                                value="<%= currUser.username %>" 
+                                required
+                                autocomplete="off"
+                            >
+                            <p class="text-secondary mt-2" style="font-size: 0.75rem;">
+                                Note: This will change how you appear on reports and in the system.
+                            </p>
+                        </div>
+
+                        <div class="pt-2">
+                            <button type="submit" class="action-btn btn-update">
+                                <i class="fa-solid fa-check-double me-2"></i> Save Changes
+                            </button>
+                            <a href="/profile" class="action-btn btn-cancel">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="mt-4 text-center">
+                    <p class="text-secondary small opacity-50">
+                        Identity changes are stored in the secure MongoDB cluster.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  const canvas = document.getElementById("glitterCanvas");
+  const ctx = canvas.getContext("2d");
+
+  let particles = [];
+  const colors = ["#a855f7", "#ec4899", "#6366f1", "#3b82f6"]; // Your theme colors
+
+  function init() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    particles = [];
+    for (let i = 0; i < 90; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 4 + 1,
+        dx: (Math.random() - 0.5) * 0.8,
+        dy: (Math.random() - 0.5) * 0.8,
+        color: colors[Math.floor(Math.random() * colors.length)],
+      });
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach((p) => {
+      // Draw 3D-like shaded sphere
+      let gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+      gradient.addColorStop(0, "white");
+      gradient.addColorStop(0.4, p.color);
+      gradient.addColorStop(1, "transparent");
+
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Movement logic
+      p.x += p.dx;
+      p.y += p.dy;
+
+      // Bounce off edges
+      if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+    });
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener("resize", init);
+  init();
+  animate();
+</script>

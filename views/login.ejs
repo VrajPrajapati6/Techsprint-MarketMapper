@@ -1,0 +1,278 @@
+<% layout('layouts/boilerplate') -%>
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+    /* --- 1. CORE VARIABLES --- */
+    :root {
+        --bg-deep: #050505;
+        --neon: #4ade80; 
+        --neon-dark: #22c55e;
+        --neon-glow: rgba(34, 197, 94, 0.5);
+        --glass-bg: rgba(255, 255, 255, 0.03);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --text: #ffffff;
+    }
+
+    /* FULL PAGE SETUP */
+    .login-wrapper {
+        display: flex; justify-content: center; align-items: center;
+        min-height: 100vh; width: 100%;
+        position: relative; overflow: hidden;
+        font-family: 'Inter', sans-serif;
+        padding-top: 60px;
+    }
+
+    /* --- 2. HEADER --- */
+    .manual-nav {
+        position: absolute; top: 0; left: 0; width: 100%;
+        display: flex; justify-content: flex-start; padding: 2rem 5%;
+        z-index: 10;
+    }
+    .logo-styled {
+        font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 700;
+        background: linear-gradient(90deg, #ffffff, #4ade80);
+        -webkit-background-clip: text; background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 10px rgba(34, 197, 94, 0.4));
+        letter-spacing: -1px;
+    }
+
+    /* --- 3. BACKGROUND EFFECTS --- */
+    .bg-fx {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        z-index: -1; pointer-events: none;
+    }
+    .orb {
+        position: absolute; border-radius: 50%;
+        filter: blur(90px); opacity: 0.55;
+        animation: float 10s infinite alternate ease-in-out;
+    }
+    .orb-1 { 
+        width: 500px; height: 500px; background: var(--neon-dark); 
+        top: -15%; right: -10%; animation-delay: 0s; 
+    }
+    .orb-2 { 
+        width: 600px; height: 600px; background: #7c3aed; 
+        bottom: -15%; left: -10%; animation-delay: -5s; 
+    }
+    
+    @keyframes float { 
+        0% { transform: translate(0, 0) scale(1); }
+        100% { transform: translate(40px, 40px) scale(1.1); }
+    }
+    .stars {
+        position: absolute; width: 100%; height: 100%;
+        background-image: 
+            radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+            radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
+            radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px);
+        background-size: 550px 550px, 350px 350px, 250px 250px;
+        opacity: 0.8; animation: twinkle 4s infinite alternate;
+    }
+    @keyframes twinkle { 0% { opacity: 0.5; transform: translateY(0); } 100% { opacity: 1; transform: translateY(-10px); } }
+
+    /* --- 4. GLASS CARD --- */
+    .auth-card {
+        width: 420px;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        text-align: center;
+        position: relative;
+    }
+    .auth-card::before {
+        content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+        background: linear-gradient(90deg, transparent, var(--neon), transparent);
+        box-shadow: 0 0 10px var(--neon-glow);
+    }
+    .brand-title {
+        font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 700; color: #fff; margin-bottom: 10px;
+    }
+    .brand-subtitle { color: #94a3b8; font-size: 0.95rem; margin-bottom: 30px; transition: 0.3s; }
+
+    /* --- 5. ALERT MESSAGES (NEW) --- */
+    .alert-box {
+        padding: 12px; margin-bottom: 20px;
+        border-radius: 12px; font-size: 0.9rem; font-weight: 500;
+        text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .alert-error {
+        background: rgba(239, 68, 68, 0.2); /* Red Glass */
+        border: 1px solid rgba(239, 68, 68, 0.5);
+        color: #fca5a5;
+    }
+    .alert-success {
+        background: rgba(34, 197, 94, 0.2); /* Green Glass */
+        border: 1px solid rgba(34, 197, 94, 0.5);
+        color: #86efac;
+    }
+
+    /* --- 6. TOGGLE SWITCH --- */
+    .toggle-container {
+        display: flex; background: rgba(0,0,0,0.4);
+        border-radius: 50px; padding: 5px;
+        margin-bottom: 30px; border: 1px solid var(--glass-border);
+        position: relative;
+    }
+    .toggle-btn {
+        flex: 1; padding: 10px; border: none; background: none;
+        color: #94a3b8; font-weight: 600; font-size: 1rem;
+        cursor: pointer; z-index: 2; transition: color 0.3s;
+        border-radius: 50px;
+    }
+    .toggle-btn.active { color: #fff; }
+    .slider {
+        position: absolute; top: 5px; left: 5px;
+        width: calc(50% - 5px); height: calc(100% - 10px);
+        background: linear-gradient(135deg, var(--neon), var(--neon-dark));
+        border-radius: 50px;
+        transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        z-index: 1;
+        box-shadow: 0 0 15px var(--neon-glow);
+    }
+
+    /* --- 7. INPUTS & BUTTONS --- */
+    .input-group { margin-bottom: 20px; text-align: left; }
+    .input-group label { display: block; color: #cbd5e1; margin-bottom: 8px; font-size: 0.9rem; margin-left: 5px; }
+    .input-group input {
+        width: 100%; padding: 14px 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px; color: white; font-size: 1rem; outline: none; transition: 0.3s;
+    }
+    .input-group input:focus {
+        border-color: var(--neon);
+        background: rgba(34, 197, 94, 0.05);
+        box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1), 0 0 15px var(--neon-glow);
+    }
+
+    .btn-primary {
+        width: 100%; padding: 14px;
+        background: linear-gradient(135deg, var(--neon) 0%, var(--neon-dark) 100%);
+        color: #000; border: none; border-radius: 12px;
+        font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s;
+        box-shadow: inset 0 2px 5px rgba(255,255,255,0.3), 0 5px 15px var(--neon-glow);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        margin-top: 10px;
+    }
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: inset 0 2px 5px rgba(255,255,255,0.4), 0 10px 30px rgba(34, 197, 94, 0.7);
+    }
+
+    .divider { margin: 25px 0; color: #64748b; font-size: 0.85rem; display: flex; align-items: center; gap: 10px; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+
+    .btn-google {
+        width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; font-weight: 500; transition: 0.3s;
+    }
+    .btn-google:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
+</style>
+
+<nav class="manual-nav">
+    <a href="/" class="logo-styled" style="text-decoration: none;">MarketMapper</a>
+</nav>
+
+<div class="login-wrapper">
+    
+    <div class="bg-fx">
+        <div class="stars"></div>
+        <div class="orb orb-1"></div> 
+        <div class="orb orb-2"></div> 
+    </div>
+
+    <div class="auth-card">
+        <h1 class="brand-title">MarketMapper</h1>
+        <p class="brand-subtitle" id="form-subtitle">Welcome back! Please enter your details.</p>
+
+        <% if(error && error.length) { %>
+            <div class="alert-box alert-error">
+                ⚠️ <%= error %>
+            </div>
+        <% } %>
+        
+        <% if(success && success.length) { %>
+            <div class="alert-box alert-success">
+                ✅ <%= success %>
+            </div>
+        <% } %>
+        <div class="toggle-container">
+            <div class="slider" id="slider-bg"></div>
+            <button class="toggle-btn active" onclick="setMode('signin')" id="btn-signin">Sign In</button>
+            <button class="toggle-btn" onclick="setMode('signup')" id="btn-signup">Sign Up</button>
+        </div>
+
+        <div id="auth-forms">
+            
+            <form action="/login" method="POST" id="form-signin">
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" placeholder="name@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+                <button class="btn-primary" id="action-btn">Sign In</button>
+            </form>
+
+            <form action="/signup" method="POST" id="form-signup" style="display: none;">
+                <div class="input-group" id="name-field">
+                    <label>Choose Username</label>
+                    <input type="text" name="username" placeholder="e.g. Xyz" required>
+                </div>
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" placeholder="name@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label>Create Password</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+                <button class="btn-primary">Create Account</button>
+            </form>
+        
+        </div>
+
+        <div class="divider">OR CONTINUE WITH</div>
+
+        <a href="/auth/google" class="btn-google">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.26.81-.58z"/><path fill="#EA4335" d="M12 4.61c1.61 0 3.06.56 4.21 1.64l3.16-3.16C17.45 1.19 14.97 0 12 0 7.7 0 3.99 2.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Continue with Google
+        </a>
+    </div>
+</div>
+
+<script>
+    function setMode(mode) {
+        const slider = document.getElementById('slider-bg');
+        const btnIn = document.getElementById('btn-signin');
+        const btnUp = document.getElementById('btn-signup');
+        const subtitle = document.getElementById('form-subtitle');
+        
+        const formSignin = document.getElementById('form-signin');
+        const formSignup = document.getElementById('form-signup');
+
+        if (mode === 'signin') {
+            slider.style.transform = 'translateX(0)';
+            btnIn.classList.add('active');
+            btnUp.classList.remove('active');
+            subtitle.innerText = 'Welcome back! Please enter your details.';
+            
+            formSignin.style.display = 'block';
+            formSignup.style.display = 'none';
+        } else {
+            slider.style.transform = 'translateX(100%)';
+            btnIn.classList.remove('active');
+            btnUp.classList.add('active');
+            subtitle.innerText = 'Create your account to start analyzing.';
+
+            formSignin.style.display = 'none';
+            formSignup.style.display = 'block';
+        }
+    }
+</script>

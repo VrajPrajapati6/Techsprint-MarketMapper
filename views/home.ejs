@@ -1,0 +1,696 @@
+<% layout('layouts/boilerplate') -%>
+
+<style>
+  :root {
+    /* PREMIUM DARK PALETTE */
+    --bg-body: #050505;
+    --card-bg: rgba(20, 20, 20, 0.6);
+    --card-border: rgba(255, 255, 255, 0.08);
+
+    /* ELITE PURPLE & PINK GRADIENTS */
+    --purple-pink-text: linear-gradient(to right, #a855f7, #ec4899, #6366f1);
+    --silver-text: linear-gradient(to right, #ffffff, #94a3b8, #ffffff);
+    --hero-gradient: linear-gradient(135deg, #0a0a0c 0%, #111115 100%);
+
+    /* SIGNAL COLORS */
+    --accent-blue: #3b82f6;
+    --accent-red: #ef4444;
+    --accent-purple: #a855f7;
+    --accent-orange: #f59e0b;
+  }
+
+  body {
+    background-color: var(--bg-body);
+    background-image: radial-gradient(
+      circle at top center,
+      rgba(168, 85, 247, 0.1),
+      transparent 60%
+    );
+  }
+
+  .dashboard-container {
+    position: relative;
+    z-index: 1;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  .glass-card {
+    z-index: 1;
+  }
+
+  /* --- GRID SYSTEM --- */
+  .top-layout-grid {
+    display: grid;
+    grid-template-columns: 1.8fr 1fr;
+    gap: 25px;
+    margin-bottom: 40px;
+  }
+
+  .metrics-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* --- CARD DESIGN --- */
+  .glass-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 28px;
+    padding: 30px;
+    backdrop-filter: blur(20px);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .glass-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 28px;
+    padding: 1.5px;
+    background: linear-gradient(
+      45deg,
+      transparent,
+      rgba(168, 85, 247, 0.4),
+      rgba(236, 72, 153, 0.4),
+      transparent
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none; /* Prevents blocking clicks */
+  }
+
+  .glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(168, 85, 247, 0.1);
+    background: rgba(30, 30, 30, 0.8);
+  }
+
+  .glass-card:hover::after {
+    opacity: 1;
+  }
+
+  /* --- HERO SECTION --- */
+  .hero-section {
+    background: var(--hero-gradient);
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+  }
+
+  .cta-button {
+    background: linear-gradient(90deg, #a855f7, #ec4899);
+    color: #fff;
+    padding: 15px 40px;
+    border-radius: 50px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-decoration: none;
+    display: inline-block;
+    width: fit-content;
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .cta-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(236, 72, 153, 0.5);
+    color: #fff;
+  }
+
+  /* --- TYPOGRAPHY & STATS --- */
+  .text-vanguard {
+    background: var(--purple-pink-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    background-size: 200%;
+    animation: shine 5s linear infinite;
+  }
+
+  .stat-number {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+
+  .icon-square {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    background: #000;
+    border: 1px solid #333;
+  }
+
+  /* --- HISTORY LINK STYLING --- */
+  .history-link {
+    color: #94a3b8;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+
+  .history-link i {
+    transition: transform 0.3s ease;
+  }
+
+  .history-link:hover {
+    color: #a855f7; /* Purple glow on hover */
+  }
+
+  .history-link:hover i {
+    transform: translateX(8px); /* Subtle arrow movement */
+  }
+
+  /* --- ACCORDION PREMIUM CUSTOMIZATION --- */
+  .accordion-item {
+    background: var(--card-bg) !important;
+    border: 1px solid var(--card-border) !important;
+    overflow: hidden;
+    margin-bottom: 15px;
+  }
+
+  .accordion-button {
+    background: transparent !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 30px !important; /* Slimmer height */
+    box-shadow: none !important;
+  }
+
+  .accordion-button::after {
+    filter: invert(1);
+    margin-left: 20px;
+  }
+
+  .signal-header-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+  }
+
+  .signal-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .badge-signal {
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  /* ACCENT COLORS */
+  .border-blue {
+    border-left: 4px solid var(--accent-blue) !important;
+  }
+  .bg-blue {
+    background: var(--accent-blue) !important;
+  }
+  .bg-blue-dim {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--accent-blue);
+  }
+  .border-top-blue {
+    border-top: 1px solid rgba(59, 130, 246, 0.2);
+  }
+
+  .border-red {
+    border-left: 4px solid var(--accent-red) !important;
+  }
+  .bg-red {
+    background: var(--accent-red) !important;
+  }
+  .bg-red-dim {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--accent-red);
+  }
+  .border-top-red {
+    border-top: 1px solid rgba(239, 68, 68, 0.2);
+  }
+
+  .border-purple {
+    border-left: 4px solid var(--accent-purple) !important;
+  }
+  .bg-purple {
+    background: var(--accent-purple) !important;
+  }
+  .bg-purple-dim {
+    background: rgba(168, 85, 247, 0.1);
+    color: var(--accent-purple);
+  }
+  .border-top-purple {
+    border-top: 1px solid rgba(168, 85, 247, 0.2);
+  }
+
+  .border-orange {
+    border-left: 4px solid var(--accent-orange) !important;
+  }
+  .bg-orange {
+    background: var(--accent-orange) !important;
+  }
+  .bg-orange-dim {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--accent-orange);
+  }
+  .border-top-orange {
+    border-top: 1px solid rgba(245, 158, 11, 0.2);
+  }
+
+  @media (max-width: 992px) {
+    .top-layout-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<div class="dashboard-container">
+  <canvas
+    id="glitterCanvas"
+    style="
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    "
+  ></canvas>
+  <div class="top-layout-grid">
+    <div class="glass-card hero-section">
+      <h6
+        class="text-secondary text-uppercase mb-2"
+        style="letter-spacing: 3px"
+      >
+        Hey.!
+      </h6>
+      <h1 class="display-3 fw-bold mb-4 text-white">
+        Welcome, <br /><span class="text-vanguard"
+          ><%= currUser.username %></span
+        >
+      </h1>
+      <p class="text-secondary lead mb-4" style="max-width: 500px">
+        Access real-time market demographics and AI-driven growth forecasting.
+      </p>
+      <a href="/analysis" class="cta-button"
+        >Start New Analysis <i class="fa-solid fa-bolt ms-2"></i
+      ></a>
+    </div>
+
+    <div class="metrics-sidebar">
+      <div class="glass-card">
+        <div class="d-flex align-items-center mb-3">
+          <div class="icon-square text-white">
+            <i class="fa-solid fa-terminal"></i>
+          </div>
+          <span class="ms-3 text-secondary text-uppercase fw-bold small"
+            >Total Reports</span
+          >
+        </div>
+        <div class="stat-number"><%= count %></div>
+        <div class="progress" style="height: 4px; background: #333">
+          <div
+            class="progress-bar"
+            style="
+              width: <%= (count/20) * 100 %>%;
+              background: var(--purple-pink-text);
+            "
+          ></div>
+        </div>
+      </div>
+
+      <div class="glass-card">
+        <div class="d-flex align-items-center mb-3">
+          <div class="icon-square text-white">
+            <i class="fa-solid fa-satellite-dish"></i>
+          </div>
+          <span class="ms-3 text-secondary text-uppercase fw-bold small"
+            >Top Region</span
+          >
+        </div>
+        <div class="stat-number" style="font-size: 2.2rem">Ahmedabad</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4 mb-5">
+    <div class="col-lg-8">
+      <div class="glass-card h-100 d-flex flex-column">
+        <h4 class="text-white fw-bold mb-4">Project Repository</h4>
+
+        <div class="flex-grow-1">
+          <% if(reports.length === 0) { %>
+          <div class="text-center py-5">
+            <i
+              class="fa-solid fa-folder-open text-secondary mb-3"
+              style="font-size: 3rem; opacity: 0.2"
+            ></i>
+            <p class="text-secondary">
+              No reports found. Start your first analysis to see them here.
+            </p>
+          </div>
+          <% } else { %> <% for(let report of reports.slice(0, 3)) { %>
+          <div
+            class="list-row border-bottom border-secondary border-opacity-10 py-3 d-flex justify-content-between align-items-center"
+          >
+            <div class="d-flex align-items-center">
+              <div class="icon-square me-4">
+                <i class="fa-solid fa-location-dot"></i>
+              </div>
+              <div>
+                <h5 class="text-white mb-1 fw-bold"><%= report.title %></h5>
+                <small class="text-secondary"
+                  >Processed <%= report.createdAt.toDateString() %></small
+                >
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+              <form
+                action="/reports/<%= report._id %>/delete"
+                method="POST"
+                class="m-0"
+              >
+                <button
+                  type="submit"
+                  class="btn btn-outline-danger d-flex align-items-center justify-content-center p-0"
+                  style="
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    border-width: 1px;
+                  "
+                  onclick="return confirm('Delete this report?');"
+                >
+                  <i
+                    class="fa-solid fa-trash-can"
+                    style="font-size: 0.75rem"
+                  ></i>
+                </button>
+              </form>
+
+              <a
+                href="/analysis/rerun?query=<%= encodeURIComponent(report.title) %>"
+                class="btn btn-sm btn-outline-light rounded-pill px-3 py-1 border-opacity-25"
+                style="font-size: 0.85rem; letter-spacing: 0.5px"
+              >
+                View Analysis
+              </a>
+            </div>
+          </div>
+          <% } %> <% } %>
+        </div>
+
+        <% if(reports.length > 0) { %>
+        <div
+          class="mt-4 pt-3 border-top border-secondary border-opacity-10 text-center"
+        >
+          <a href="/history" class="history-link">
+            View Complete History
+            <i class="fa-solid fa-arrow-right-long ms-2"></i>
+          </a>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-12">
+      <h4 class="text-white fw-bold mb-4 px-2">Elite Market Signals</h4>
+      <div class="accordion" id="startupAccordion">
+        <div class="accordion-item glass-card mb-3 border-blue">
+          <h2 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseOne"
+            >
+              <div class="d-flex align-items-center w-100">
+                <div class="signal-icon bg-blue">
+                  <i class="fa-solid fa-charging-station"></i>
+                </div>
+                <div class="ms-4">
+                  <span class="d-block text-white fw-bold fs-5"
+                    >EV Charging Hub & Lounge</span
+                  >
+                  <small class="text-secondary text-uppercase"
+                    >Best Location:
+                    <strong class="text-blue">S.G. Highway</strong></small
+                  >
+                </div>
+                <span class="ms-auto badge-signal bg-blue-dim"
+                  >High Demand</span
+                >
+              </div>
+            </button>
+          </h2>
+          <div
+            id="collapseOne"
+            class="accordion-collapse collapse"
+            data-bs-parent="#startupAccordion"
+          >
+            <div class="accordion-body border-top-blue text-secondary">
+              The S.G. Highway corridor is experiencing a massive surge in
+              high-end electric vehicle adoption, yet current charging
+              infrastructure lacks professional amenities. This opportunity
+              involves building a high-speed DC charging station integrated with
+              a soundproof, premium "Neural Lounge" where executives can work
+              comfortably while their cars charge. Data shows a 68%
+              dissatisfaction rate regarding the current "waiting environment,"
+              creating a high-demand niche for a "Charge & Work" ecosystem. With
+              an estimated ROI of 18 to 22 months, this model relies on
+              high-margin amenities rather than just electricity sales.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item glass-card mb-3 border-red">
+          <h2 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseTwo"
+            >
+              <div class="d-flex align-items-center w-100">
+                <div class="signal-icon bg-red">
+                  <i class="fa-solid fa-fire-burner"></i>
+                </div>
+                <div class="ms-4">
+                  <span class="d-block text-white fw-bold fs-5"
+                    >Health Cloud Kitchen</span
+                  >
+                  <small class="text-secondary text-uppercase"
+                    >Best Location:
+                    <strong class="text-red">Prahlad Nagar</strong></small
+                  >
+                </div>
+                <span class="ms-auto badge-signal bg-red-dim">Trending</span>
+              </div>
+            </button>
+          </h2>
+          <div
+            id="collapseTwo"
+            class="accordion-collapse collapse"
+            data-bs-parent="#startupAccordion"
+          >
+            <div class="accordion-body border-top-red text-secondary">
+              Prahlad Nagar has the highest density of corporate offices in the
+              region, but there is a 300% surge in unmet search queries for
+              "Keto" and "High-Protein" meal subscriptions. This startup would
+              utilize a cloud-kitchen model to eliminate high storefront costs
+              while using AI to personalize meal macros based on a user's health
+              data and fitness goals. By focusing on a subscription-first model,
+              the business ensures high customer retention and predictable
+              revenue streams. The strategic advantage lies in the integration
+              of automated calorie tracking and hyper-local delivery optimized
+              for corporate lunch hours.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item glass-card mb-3 border-purple">
+          <h2 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseThree"
+            >
+              <div class="d-flex align-items-center w-100">
+                <div class="signal-icon bg-purple">
+                  <i class="fa-solid fa-gamepad"></i>
+                </div>
+                <div class="ms-4">
+                  <span class="d-block text-white fw-bold fs-5"
+                    >Elite E-Sports Arena</span
+                  >
+                  <small class="text-secondary text-uppercase"
+                    >Best Location:
+                    <strong class="text-purple">Sindhu Bhavan</strong></small
+                  >
+                </div>
+                <span class="ms-auto badge-signal bg-purple-dim">Emerging</span>
+              </div>
+            </button>
+          </h2>
+          <div
+            id="collapseThree"
+            class="accordion-collapse collapse"
+            data-bs-parent="#startupAccordion"
+          >
+            <div class="accordion-body border-top-purple text-secondary">
+              The Gen-Z demographic in the Sindhu Bhavan area is rapidly
+              shifting its spending away from traditional cafes toward
+              high-immersion "Experience Hubs". There is a significant market
+              gap for an international-standard arena that provides private
+              streaming booths for creators and high-end VR setups for casual
+              gamers. This "Blue Ocean" opportunity thrives on a mix of hourly
+              rentals, membership tiers, and the hosting of localized
+              competitive tournaments. Revenue is further boosted through a
+              high-margin snack bar and exclusive sales of gaming peripherals to
+              a captive, enthusiast audience.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item glass-card mb-3 border-orange">
+          <h2 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseFour"
+            >
+              <div class="d-flex align-items-center w-100">
+                <div class="signal-icon bg-orange">
+                  <i class="fa-solid fa-sun"></i>
+                </div>
+                <div class="ms-4">
+                  <span class="d-block text-white fw-bold fs-5"
+                    >Solar Smart-Grid</span
+                  >
+                  <small class="text-secondary text-uppercase"
+                    >Best Location:
+                    <strong class="text-orange">Bopal Area</strong></small
+                  >
+                </div>
+                <span class="ms-auto badge-signal bg-orange-dim"
+                  >Sustainable</span
+                >
+              </div>
+            </button>
+          </h2>
+          <div
+            id="collapseFour"
+            class="accordion-collapse collapse"
+            data-bs-parent="#startupAccordion"
+          >
+            <div class="accordion-body border-top-orange text-secondary">
+              High-growth luxury residential zones in the Bopal-Ambli area are
+              reaching peak grid capacity, leading to a demand for localized
+              energy independence. This startup would implement a peer-to-peer
+              (P2P) energy trading platform allowing gated communities to sell
+              excess solar power directly to their neighbors. This decentralized
+              "Smart-Grid" approach can reduce community common-area maintenance
+              costs by up to 22% while providing homeowners a faster ROI on
+              their solar panels. It addresses a 12% sector deficit in local
+              energy storage and management, making it a highly sustainable and
+              scalable infrastructure play.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const canvas = document.getElementById("glitterCanvas");
+  const ctx = canvas.getContext("2d");
+
+  let particles = [];
+  const colors = ["#a855f7", "#ec4899", "#6366f1", "#3b82f6"]; // Your theme colors
+
+  function init() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    particles = [];
+    for (let i = 0; i < 90; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 4 + 1,
+        dx: (Math.random() - 0.5) * 0.8,
+        dy: (Math.random() - 0.5) * 0.8,
+        color: colors[Math.floor(Math.random() * colors.length)],
+      });
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach((p) => {
+      // Draw 3D-like shaded sphere
+      let gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+      gradient.addColorStop(0, "white");
+      gradient.addColorStop(0.4, p.color);
+      gradient.addColorStop(1, "transparent");
+
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Movement logic
+      p.x += p.dx;
+      p.y += p.dy;
+
+      // Bounce off edges
+      if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+    });
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener("resize", init);
+  init();
+  animate();
+</script>

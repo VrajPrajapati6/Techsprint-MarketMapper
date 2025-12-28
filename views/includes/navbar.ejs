@@ -1,0 +1,47 @@
+<style>
+    .app-navbar {
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 15px 0;
+        position: sticky; top: 0; z-index: 1000; width: 100%;
+    }
+    .nav-brand {
+        font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.6rem;
+        background: linear-gradient(90deg, #fff, #4ade80);
+        -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+        text-decoration: none;
+    }
+    .nav-links-group { display: flex; gap: 30px; position: absolute; left: 50%; transform: translateX(-50%); }
+    .nav-link-custom { color: #94a3b8; font-weight: 500; text-decoration: none; transition: 0.3s; }
+    .nav-link-custom:hover, .nav-link-custom.active { color: #22c55e; }
+    .profile-btn {
+        background: rgba(34, 197, 94, 0.1); color: #22c55e; padding: 8px 16px; border-radius: 50px;
+        border: 1px solid rgba(34, 197, 94, 0.2); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 10px;
+    }
+    .profile-img { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; }
+</style>
+
+<nav class="app-navbar">
+    <div class="container-fluid px-4 d-flex justify-content-between align-items-center position-relative">
+        <a href="/dashboard" class="nav-brand">MarketMapper</a>
+        
+        <div class="nav-links-group">
+            <a href="/dashboard" class="nav-link-custom <%= (typeof link !== 'undefined' && link === 'dashboard') ? 'active' : '' %>">Dashboard</a>
+            <a href="/analysis" class="nav-link-custom <%= (typeof link !== 'undefined' && link === 'analysis') ? 'active' : '' %>">Analysis</a>
+            <a href="/history" class="nav-link-custom <%= (typeof link !== 'undefined' && link === 'history') ? 'active' : '' %>">History</a>
+        </div>
+
+        <div class="d-flex align-items-center gap-3">
+            <% if(currUser) { %>
+                <a href="/profile" class="profile-btn">
+                    <img src="<%= currUser.image || 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png' %>" class="profile-img">
+                    <%= currUser.username ? currUser.username.split(' ')[0] : 'User' %>
+                </a>
+                <a href="/logout" style="color: #ef4444; text-decoration: none; font-weight: 500;">Logout</a>
+            <% } else { %>
+                <a href="/login" class="nav-link-custom">Sign in</a>
+            <% } %>
+        </div>
+    </div>
+</nav>

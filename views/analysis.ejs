@@ -1,0 +1,245 @@
+<% layout('layouts/boilerplate') -%>
+
+<style>
+    /* --- ANALYSIS PAGE VIEWPORT --- */
+    .analysis-container {
+        /* Centers the card perfectly between the capsule navbar and slim footer */
+        min-height: calc(100vh - 200px); 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+
+    /* --- PREMIUM GLASS CARD --- */
+    .analysis-card {
+        background: rgba(20, 20, 20, 0.6);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 40px;
+        padding: 60px 45px;
+        width: 100%;
+        max-width: 850px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        transition: transform 0.3s ease;
+    }
+
+    /* Subtle background glow */
+    .analysis-card::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(168, 85, 247, 0.03) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    /* --- TYPOGRAPHY --- */
+    .display-title {
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-weight: 800;
+        letter-spacing: -1px;
+        color: white;
+        text-align: center;
+    }
+
+    .subtitle-glow {
+        color: #94a3b8;
+        font-size: 1.1rem;
+        opacity: 0.8;
+        text-align: center;
+    }
+
+    /* --- NEURAL INPUT SYSTEM --- */
+    .neural-input-wrapper {
+        position: relative;
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 100px;
+        padding: 8px 10px 8px 30px;
+        display: flex;
+        align-items: center;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        margin-top: 45px;
+    }
+
+    .neural-input-wrapper:focus-within {
+        border-color: #a855f7;
+        box-shadow: 0 0 30px rgba(168, 85, 247, 0.2);
+        background: rgba(0, 0, 0, 0.6);
+        transform: translateY(-2px);
+    }
+
+    .neural-input {
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 1.1rem;
+        width: 100%;
+        padding: 12px 0;
+        outline: none;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .neural-input::placeholder {
+        color: rgba(255, 255, 255, 0.25);
+    }
+
+    /* --- ANALYZE BUTTON --- */
+    .analyze-btn {
+        background: linear-gradient(90deg, #a855f7, #ec4899);
+        border: none;
+        color: white;
+        padding: 14px 40px;
+        border-radius: 100px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+        font-size: 0.9rem;
+    }
+
+    .analyze-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 40px rgba(236, 72, 153, 0.4);
+        filter: brightness(1.1);
+    }
+
+    /* --- FEATURE BADGES --- */
+    .feature-tag {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .feature-tag i {
+        color: #22c55e;
+    }
+
+    .neural-badge {
+        background: rgba(168, 85, 247, 0.1);
+        color: #a855f7;
+        border: 1px solid rgba(168, 85, 247, 0.2);
+        padding: 6px 16px;
+        border-radius: 50px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+</style>
+
+<div class="analysis-container">
+    <canvas
+    id="glitterCanvas"
+    style="
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    "
+  ></canvas>
+    <div class="analysis-card">
+        <div class="text-center">
+            <div class="neural-badge">
+                <i class="fa-solid fa-wand-magic-sparkles me-2"></i> DIVE IN DEEP.
+            </div>
+            
+            <h1 class="display-title mb-3">Start New Analysis</h1>
+            <p class="subtitle-glow">Enter a business type and target location to generate deep-market AI insights.</p>
+        </div>
+
+        <form action="/analysis/loading" method="POST">
+            <div class="neural-input-wrapper">
+                <i class="fa-solid fa-magnifying-glass text-secondary me-3" style="opacity: 0.5;"></i>
+                <input type="text" 
+                       name="query" 
+                       class="neural-input" 
+                       placeholder="e.g. 'Luxury Gym in Navrangpura, Ahmedabad'" 
+                       required>
+                <button type="submit" class="analyze-btn">
+                    Analyze <i class="fa-solid fa-bolt-lightning"></i>
+                </button>
+            </div>
+        </form>
+
+        <div class="mt-5 d-flex justify-content-center gap-5">
+            <div class="feature-tag">
+                <i class="fa-solid fa-circle-check"></i> Real-time Demographics
+            </div>
+            <div class="feature-tag">
+                <i class="fa-solid fa-circle-check"></i> Growth Forecasting
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  const canvas = document.getElementById("glitterCanvas");
+  const ctx = canvas.getContext("2d");
+
+  let particles = [];
+  const colors = ["#a855f7", "#ec4899", "#6366f1", "#3b82f6"]; // Your theme colors
+
+  function init() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    particles = [];
+    for (let i = 0; i < 90; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 4 + 1,
+        dx: (Math.random() - 0.5) * 0.8,
+        dy: (Math.random() - 0.5) * 0.8,
+        color: colors[Math.floor(Math.random() * colors.length)],
+      });
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach((p) => {
+      // Draw 3D-like shaded sphere
+      let gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+      gradient.addColorStop(0, "white");
+      gradient.addColorStop(0.4, p.color);
+      gradient.addColorStop(1, "transparent");
+
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Movement logic
+      p.x += p.dx;
+      p.y += p.dy;
+
+      // Bounce off edges
+      if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+    });
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener("resize", init);
+  init();
+  animate();
+</script>

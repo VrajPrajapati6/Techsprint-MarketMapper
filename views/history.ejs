@@ -1,0 +1,191 @@
+<% layout('layouts/boilerplate') -%>
+
+<canvas id="glitterCanvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1;"></canvas>
+
+<div class="container my-5" style="min-height: 85vh;">
+    <div class="main-history-box p-4 p-md-5">
+        
+        <div class="position-absolute rounded-circle bg-primary opacity-25" style="width: 50px; height: 50px; top: -15px; right: 5%; filter: blur(10px); animation: float 8s infinite;"></div>
+        <div class="position-absolute rounded-circle bg-info opacity-20" style="width: 25px; height: 25px; bottom: 5%; left: 3%; filter: blur(5px); animation: float 5s infinite reverse;"></div>
+        <div class="position-absolute rounded-circle bg-primary opacity-30" style="width: 40px; height: 40px; top: 30%; left: -30px; filter: blur(30px); animation: float 12s infinite;"></div>
+        <div class="position-absolute rounded-circle bg-danger opacity-15" style="width: 40px; height: 40px; top: 15%; left: 40%; filter: blur(15px); animation: float 7s infinite reverse;"></div>
+        <div class="position-absolute rounded-circle bg-info opacity-10" style="width: 20px; height: 20px; bottom: 15%; right: -20px; filter: blur(35px); animation: float 15s infinite;"></div>
+        <div class="position-absolute rounded-circle bg-white opacity-20" style="width: 8px; height: 8px; top: 40%; right: 25%; filter: blur(2px); animation: float 6s infinite;"></div>
+
+        <div class="d-flex justify-content-between align-items-center mb-5 position-relative" style="z-index: 2;">
+            <div>
+                <h2 class="text-white fw-bold mb-1" style="letter-spacing: 1px;">Neural Archives</h2>
+                <p class="text-secondary small mb-0">Stored market intelligence patterns</p>
+            </div>
+            <a href="/analysis" class="btn btn-sm btn-outline-info rounded-pill px-4 py-2 border-opacity-50">
+                <i class="fa-solid fa-plus me-2"></i>New Analysis
+            </a>
+        </div>
+
+        <div class="d-flex flex-column gap-3 position-relative" style="z-index: 2;">
+            <% if (reports.length > 0) { %>
+                <% reports.forEach(report => { %>
+                    <div class="analysis-card-neon p-3 rounded-4 d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-circle-glow rounded-circle me-3 d-flex align-items-center justify-content-center">
+                                <i class="fa-solid fa-microchip"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-white mb-1 fw-bold"><%= report.title %></h6>
+                                <div class="d-flex gap-3">
+                                    <small class="text-secondary"><i class="fa-solid fa-location-dot me-1"></i><%= report.location %></small>
+                                    <small class="text-secondary"><i class="fa-solid fa-calendar-day me-1"></i><%= report.createdAt.toDateString() %></small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3">
+                            <form action="/reports/<%= report._id %>/delete" method="POST" class="m-0">
+                                <button type="submit" class="btn-delete-neon" onclick="return confirm('Erase this record?');">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </form>
+
+                            <a href="/analysis/rerun?query=<%= encodeURIComponent(report.title) %>" class="btn-view-neon rounded-pill px-4">
+                                Launch Analysis
+                            </a>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="text-center py-5">
+                    <p class="text-secondary italic">Your neural storage is currently empty.</p>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Main Box Styling with Gradient Bleed */
+    .main-history-box {
+        position: relative;
+        background: rgba(13, 13, 13, 0.95) !important;
+        border-radius: 24px;
+        transition: all 0.5s ease-in-out;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        overflow: visible !important;
+    }
+
+    /* Spreading Glow Logic */
+    .main-history-box::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(45deg, #a855f7, #ec4899, #3b82f6, #0dcaf0);
+        z-index: -1;
+        border-radius: 26px;
+        filter: blur(20px);
+        opacity: 0.3;
+        transition: all 0.6s ease;
+    }
+
+    .main-history-box:hover::before {
+        filter: blur(45px);
+        opacity: 0.6;
+        top: -10px; left: -10px; right: -10px; bottom: -10px;
+    }
+
+    /* Individual Curved Cards */
+    .analysis-card-neon {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .analysis-card-neon:hover {
+        background: rgba(255, 255, 255, 0.07);
+        border-color: rgba(168, 85, 247, 0.5);
+        transform: scale(1.01) translateX(5px);
+        box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+    }
+
+    .icon-circle-glow {
+        width: 45px; height: 45px;
+        background: rgba(13, 202, 240, 0.08);
+        border: 1px solid rgba(13, 202, 240, 0.3);
+        color: #0dcaf0;
+    }
+
+    /* Buttons */
+    .btn-delete-neon {
+        width: 38px; height: 38px;
+        border-radius: 50%;
+        border: 1px solid rgba(220, 53, 69, 0.3);
+        background: transparent;
+        color: #dc3545;
+        transition: 0.3s;
+    }
+
+    .btn-delete-neon:hover {
+        background: #dc3545; color: white;
+        box-shadow: 0 0 15px rgba(220, 53, 69, 0.5);
+    }
+
+    .btn-view-neon {
+        background: transparent;
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        font-size: 0.85rem; padding: 8px 0;
+        text-decoration: none; transition: 0.3s;
+    }
+
+    .btn-view-neon:hover {
+        border-color: #ec4899;
+        box-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0) translateX(0); }
+        50% { transform: translateY(-20px) translateX(10px); }
+    }
+</style>
+
+<script>
+    const canvas = document.getElementById("glitterCanvas");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+    const colors = ["#a855f7", "#ec4899", "#6366f1", "#3b82f6"];
+
+    function init() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        particles = [];
+        for (let i = 0; i < 90; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 4 + 1,
+                dx: (Math.random() - 0.5) * 0.8,
+                dy: (Math.random() - 0.5) * 0.8,
+                color: colors[Math.floor(Math.random() * colors.length)],
+            });
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((p) => {
+            let gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+            gradient.addColorStop(0, "white");
+            gradient.addColorStop(0.4, p.color);
+            gradient.addColorStop(1, "transparent");
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+            p.x += p.dx; p.y += p.dy;
+            if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+            if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+        });
+        requestAnimationFrame(animate);
+    }
+    window.addEventListener("resize", init);
+    init();
+    animate();
+</script>

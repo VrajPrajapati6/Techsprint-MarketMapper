@@ -1,0 +1,152 @@
+/* Reset only inside our app */
+.mm-main * {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Page */
+.mm-main {
+    min-height: 100vh;
+    background: #0f172a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 0;
+}
+
+/* Form */
+.mm-form {
+    width: 540px;
+    background: #020617;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+/* ------------------------------
+   Inputs / Textarea (Bootstrap-safe)
+-------------------------------- */
+
+.mm-main .form-control,
+.mm-textarea,
+.mm-input {
+    width: 100%;
+    padding: 12px;
+    background: #020617;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: #e5e7eb;
+}
+
+.mm-main .form-control::placeholder,
+.mm-textarea::placeholder {
+    color: #94a3b8;
+}
+
+/* Focus state (FIXES white bg issue) */
+.mm-main .form-control:focus {
+    background: #020617;
+    color: #e5e7eb;
+    border-color: #22c55e;
+    box-shadow: 0 0 0 0.15rem rgba(34, 197, 94, 0.25);
+}
+
+/* Textarea specific */
+.mm-textarea {
+    height: 120px;
+    resize: none;
+    margin-bottom: 20px;
+}
+
+/* ------------------------------
+   Bootstrap validation overrides
+-------------------------------- */
+
+/* Invalid */
+.mm-main .was-validated .form-control:invalid {
+    background: #020617;
+    color: #e5e7eb;
+    border-color: #ef4444;
+}
+
+/* Valid */
+.mm-main .was-validated .form-control:valid {
+    background: #020617;
+    color: #e5e7eb;
+    border-color: #22c55e;
+}
+
+/* Remove Bootstrap icons (important for dark UI) */
+.mm-main .was-validated .form-control:valid,
+.mm-main .was-validated .form-control:invalid {
+    background-image: none;
+}
+
+/* Location */
+.mm-location {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.mm-label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #94a3b8;
+}
+
+/* Suggestions */
+.mm-suggestions {
+    list-style: none;
+    position: absolute;
+    width: 100%;
+    background: #020617;
+    border: 1px solid #334155;
+    border-top: none;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 50;
+}
+
+.mm-suggestions li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #1e293b;
+    color: #e5e7eb;
+}
+
+.mm-suggestions li:hover {
+    background: #1e293b;
+}
+
+/* Map */
+.mm-map-wrapper {
+    margin-bottom: 20px;
+}
+
+.mm-map {
+    height: 200px;
+    border-radius: 10px;
+    border: 1px dashed #475569;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+}
+
+/* Button */
+.mm-btn {
+    width: 100%;
+    padding: 12px;
+    background: #22c55e;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    color: #020617;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.mm-btn:hover {
+    background: #16a34a;
+}

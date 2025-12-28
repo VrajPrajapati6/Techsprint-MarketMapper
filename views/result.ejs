@@ -1,0 +1,395 @@
+<% layout('layouts/boilerplate') -%>
+
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  crossorigin=""
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+  /* 1. GLOBAL & LAYOUT */
+  body {
+    overflow: hidden;
+    background: #000;
+  }
+
+  .split-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    margin-top: -76px;
+    padding-top: 76px;
+  }
+
+  /* 2. MAP STYLING */
+  .map-pane {
+    width: 50%;
+    height: 100%;
+    position: relative;
+  }
+  #map {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  /* 3. NEURAL CONTENT PANE (RIGHT SIDE) */
+  .content-pane {
+    width: 50%;
+    height: 100%;
+    overflow-y: auto;
+    background: rgba(10, 10, 10, 0.9);
+    backdrop-filter: blur(20px);
+    padding: 60px 45px;
+    position: relative;
+    z-index: 2;
+    border-top-left-radius: 40px;
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  /* Spreading Gradient Glow */
+  .content-pane::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+      circle at top right,
+      rgba(168, 85, 247, 0.12),
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  /* Scrollbar */
+  .content-pane::-webkit-scrollbar {
+    width: 5px;
+  }
+  .content-pane::-webkit-scrollbar-thumb {
+    background: #a855f7;
+    border-radius: 10px;
+  }
+
+  /* 4. COMPONENT HOVER EFFECTS  */
+  .score-card,
+  .stat-box,
+  .swot-card,
+  .expansion-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .score-card:hover,
+  .stat-box:hover,
+  .swot-card:hover,
+  .expansion-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 10px 25px rgba(168, 85, 247, 0.2);
+    border-color: rgba(168, 85, 247, 0.4) !important;
+  }
+
+  /* Card Specifics */
+  .score-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 25px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .stat-box {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 18px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .swot-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 18px;
+    padding: 20px;
+    height: 100%;
+  }
+
+  .score-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #fff;
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+  }
+
+  /* Force the custom stack icon to appear  */
+  .leaflet-control-layers {
+    background: rgba(13, 13, 13, 0.85) !important;
+    backdrop-filter: blur(10px);
+    border-radius: 12px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+  }
+
+  /* RED PDF BUTTON  */
+  .btn-pdf-export {
+    background-color: #ef4444 !important;
+    color: #ffffff !important;
+    border: none !important;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  .btn-pdf-export:hover {
+    background-color: #dc2626 !important;
+    transform: scale(1.05) translateY(-2px) !important;
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+  }
+
+  @media (max-width: 992px) {
+    .split-container {
+      flex-direction: column;
+      height: auto;
+      margin-top: 0;
+      padding-top: 0;
+    }
+    .map-pane {
+      width: 100%;
+      height: 400px;
+    }
+    .content-pane {
+      width: 100%;
+      border-radius: 0;
+    }
+  }
+</style>
+
+<div class="split-container">
+  <div class="map-pane"><div id="map"></div></div>
+
+  <div class="content-pane" id="report-content">
+    <div class="mb-5">
+      <h6
+        class="text-uppercase mb-2"
+        style="
+          color: #a855f7;
+          letter-spacing: 3px;
+          font-weight: 700;
+          font-size: 0.7rem;
+        "
+      >
+        Neural Intelligence Report
+      </h6>
+      <h1 class="display-5 fw-bold text-white"><%= query %></h1>
+    </div>
+
+    <div class="score-card">
+      <div>
+        <h4 class="text-white mb-1">Market Potential</h4>
+        <p class="mb-0 text-secondary small">
+          Intensity:
+          <span
+            class="badge rounded-pill px-3 <%= data.competition_level === 'High' ? 'bg-danger' : (data.competition_level === 'Medium' ? 'bg-warning text-dark' : 'bg-success') %>"
+          >
+            <%= data.competition_level %>
+          </span>
+        </p>
+      </div>
+      <div class="score-circle"><%= data.market_score %></div>
+    </div>
+
+    <div class="mb-5">
+      <h5
+        class="text-white mb-3 small text-uppercase"
+        style="letter-spacing: 1px"
+      >
+        <i class="fa-solid fa-wand-magic-sparkles me-2 text-info"></i>Gemini
+        Insight
+      </h5>
+      <div
+        class="p-4 rounded-4"
+        style="
+          background: rgba(168, 85, 247, 0.05);
+          border-left: 4px solid #a855f7;
+          color: #cbd5e1;
+          line-height: 1.6;
+        "
+      >
+        <%= data.gap_analysis %>
+      </div>
+    </div>
+
+    <div class="row g-3 mb-5">
+      <div class="col-6">
+        <div class="stat-box">
+          <small class="text-secondary d-block mb-1">Competitor Count</small>
+          <h3 class="text-white mb-0">
+            ~<%= data.total_competitors_count || 0 %>
+          </h3>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="stat-box">
+          <small class="text-secondary d-block mb-1">Avg Market Rating</small>
+          <h3 class="text-warning mb-0">
+            <%= data.average_market_rating || 0 %> ⭐
+          </h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-5">
+      <h5
+        class="text-white mb-4 small text-uppercase"
+        style="letter-spacing: 1px"
+      >
+        Neural SWOT Analysis
+      </h5>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="swot-card" style="border-top: 3px solid #22c55e">
+            <strong class="text-white d-block mb-2">Strengths</strong>
+            <ul class="text-secondary small ps-3 mb-0">
+              <% data.swot.strengths.forEach(s => { %>
+              <li><%= s %></li>
+              <% }) %>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="swot-card" style="border-top: 3px solid #ef4444">
+            <strong class="text-white d-block mb-2">Weaknesses</strong>
+            <ul class="text-secondary small ps-3 mb-0">
+              <% data.swot.weaknesses.forEach(w => { %>
+              <li><%= w %></li>
+              <% }) %>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="swot-card" style="border-top: 3px solid #3b82f6">
+            <strong class="text-white d-block mb-2">Opportunities</strong>
+            <ul class="text-secondary small ps-3 mb-0">
+              <% data.swot.opportunities.forEach(o => { %>
+              <li><%= o %></li>
+              <% }) %>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="swot-card" style="border-top: 3px solid #eab308">
+            <strong class="text-white d-block mb-2">Threats</strong>
+            <ul class="text-secondary small ps-3 mb-0">
+              <% data.swot.threats.forEach(t => { %>
+              <li><%= t %></li>
+              <% }) %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-5">
+      <h5 class="text-white mb-3 small text-uppercase">
+        City Expansion Strategy
+      </h5>
+      <div class="row g-2">
+        <% if(data.alternative_locations) { %> <%
+        data.alternative_locations.forEach(loc => { %>
+        <div
+          class="col-12 p-3 rounded-4 expansion-card border border-info border-opacity-10"
+          style="background: rgba(13, 202, 240, 0.03)"
+        >
+          <strong class="text-info d-block mb-1 small"><%= loc.area %></strong>
+          <p class="text-secondary small mb-0"><%= loc.reason %></p>
+        </div>
+        <% }) %> <% } %>
+      </div>
+    </div>
+
+    <div id="pdf-ignore" class="text-center pt-4 pb-5">
+      <button
+        onclick="downloadPDF()"
+        class="btn btn-pdf-export rounded-pill px-5 py-3 shadow-lg"
+      >
+        <i class="fa-solid fa-file-pdf me-2"></i> DOWNLOAD INTELLIGENCE REPORT
+      </button>
+    </div>
+  </div>
+</div>
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  crossorigin=""
+></script>
+<script>
+      const center = <%- JSON.stringify(data.center_coords || { lat: 23.0225, lng: 72.5714 }) %>;
+      const competitors = <%- JSON.stringify(data.competitors || []) %>;
+
+      // Layer Definitions
+      const dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png');
+      const light = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png');
+      const sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}');
+
+      const map = L.map('map', { zoomControl: false, layers: [dark] }).setView([center.lat, center.lng], 14);
+
+      // Custom Stack Control Configuration
+      const baseMaps = {
+          "<span style='color: #a855f7;'>●</span> Dark Mode": dark,
+          "<span style='color: #0dcaf0;'>●</span> Light Mode": light,
+          "<span style='color: #ec4899;'>●</span> Satellite": sat
+      };
+
+      L.control.layers(baseMaps, null, { position: 'topright', collapsed: true }).addTo(map);
+      L.control.zoom({ position: 'topright' }).addTo(map);
+
+      L.marker([center.lat, center.lng]).addTo(map).bindPopup("Target Location").openPopup();
+      competitors.forEach(c => {
+          L.circleMarker([c.lat, c.lng], { color: '#ec4899', radius: 8 }).addTo(map).bindPopup(c.name);
+      });
+
+  function downloadPDF() {
+      const element = document.getElementById('report-content');
+      const btn = document.getElementById('pdf-ignore');
+
+      // 1. Save original styles to restore them later
+      const originalWidth = element.style.width;
+      const originalBorder = element.style.borderLeft;
+
+      // 2. Prepare for capture: Force 100% width and hide button
+      btn.style.display = 'none';
+      element.style.width = '100%';
+      element.style.borderLeft = 'none';
+
+      const opt = {
+          margin: 0.5,
+          filename: 'MarketMapper_Report.pdf',
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: {
+              scale: 2,
+              backgroundColor: '#0a0a0a',
+              useCORS: true,
+              scrollY: 0 
+          },
+          jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+
+      
+      html2pdf().set(opt).from(element).save().then(() => {
+          element.style.width = originalWidth;
+          element.style.borderLeft = originalBorder;
+          btn.style.display = 'block';
+      });
+  }
+</script>

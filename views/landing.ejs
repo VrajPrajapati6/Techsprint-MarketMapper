@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarketMapper | AI Business Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- 1. CORE VARIABLES & RESET --- */
+        :root {
+            --bg-deep: #050505;
+            --primary-glow: radial-gradient(circle, rgba(34,197,94,0.4) 0%, rgba(0,0,0,0) 70%);
+            --secondary-glow: radial-gradient(circle, rgba(139,92,246,0.3) 0%, rgba(0,0,0,0) 70%);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --neon-green: #22c55e;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* --- 2. ANIMATED BACKGROUND (The "Glitter" & Nebulas) --- */
+        .bg-fx {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; overflow: hidden; pointer-events: none;
+        }
+        
+        /* Moving glowing orbs */
+        .orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(80px); opacity: 0.6;
+            animation: float 10s infinite alternate ease-in-out;
+        }
+        .orb-1 { width: 400px; height: 400px; background: #22c55e; top: -10%; left: -10%; animation-delay: 0s; }
+        .orb-2 { width: 500px; height: 500px; background: #6366f1; bottom: -10%; right: -10%; animation-delay: -5s; }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 50px) scale(1.1); }
+        }
+
+        /* Twinkling Stars (The Glitter) */
+        .stars {
+            position: absolute; width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
+                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+            opacity: 0.8;
+            animation: twinkle 4s infinite alternate;
+        }
+        
+        @keyframes twinkle {
+            0% { opacity: 0.5; transform: translateY(0); }
+            100% { opacity: 1; transform: translateY(-10px); }
+        }
+
+        /* --- 3. NAVBAR --- */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 2rem 5%;
+            z-index: 10;
+        }
+
+        /* RESTORED GRADIENT LOGO (But Brighter/Readable) */
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem; 
+            font-weight: 700;
+            
+            /* High-Contrast Gradient: White to Bright Green */
+            background: linear-gradient(90deg, #ffffff, #4ade80);
+            
+            /* FIXED: Added standard background-clip for compatibility */
+            -webkit-background-clip: text;
+            background-clip: text; 
+            
+            -webkit-text-fill-color: transparent;
+            
+            /* Drop Shadow to pop against black bg */
+            filter: drop-shadow(0 0 10px rgba(34, 197, 94, 0.4));
+            
+            letter-spacing: -1px;
+        }
+
+        .btn-glass {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: #fff; 
+            padding: 1rem 2.5rem; 
+            font-size: 1.1rem;
+            border-radius: 50px; text-decoration: none; font-weight: 600;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .btn-glass:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--neon-green);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* --- 4. HERO SECTION --- */
+        .hero {
+            flex: 1; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            text-align: center; padding: 0 2rem;
+            z-index: 5;
+        }
+
+        /* Animated Gradient Text */
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4.5rem; line-height: 1.1; margin-bottom: 1.5rem;
+            max-width: 1000px;
+            
+            background: linear-gradient(to right, #ffffff 20%, #22c55e 50%, #ffffff 80%);
+            background-size: 200% auto;
+            
+            /* FIXED: Added standard background-clip here too */
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+            animation: shine 5s linear infinite;
+        }
+        
+        @keyframes shine { to { background-position: 200% center; } }
+
+        p {
+            font-size: 1.25rem; color: var(--text-muted);
+            max-width: 650px; margin-bottom: 3rem; line-height: 1.6;
+        }
+
+        /* The Main Glowing Button */
+        .btn-cta {
+            position: relative;
+            background: var(--neon-green);
+            color: #000; padding: 1.2rem 3.5rem;
+            font-size: 1.2rem; font-weight: 700; border-radius: 50px;
+            text-decoration: none; overflow: hidden;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+            transition: transform 0.2s;
+        }
+        
+        /* The "Shine" passing through the button */
+        .btn-cta::after {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.5s;
+        }
+        .btn-cta:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(34, 197, 94, 0.6); }
+        .btn-cta:hover::after { left: 100%; }
+
+        /* --- 5. GLASS CARDS GRID --- */
+        .features {
+            display: flex; gap: 2rem; margin-top: 5rem;
+            perspective: 1000px;
+        }
+        
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 2rem; border-radius: 20px;
+            width: 280px; text-align: left;
+            backdrop-filter: blur(12px);
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            border-color: var(--neon-green);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .icon { 
+            font-size: 3.5rem; 
+            margin-bottom: 1.5rem; 
+            display: block; 
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+        }
+        .card h3 { font-size: 1.2rem; margin-bottom: 0.5rem; color: #fff; }
+        .card span { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8rem; }
+            .features { flex-direction: column; width: 100%; align-items: center; }
+            .card { width: 90%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-fx">
+        <div class="stars"></div> <div class="orb orb-1"></div> <div class="orb orb-2"></div> 
+    </div>
+
+    <nav>
+        <div class="logo">MarketMapper</div>
+        <a href="/login" class="btn-glass">Sign In</a>
+    </nav>
+
+    <div class="hero">
+        <h1>From Garage Idea to <br> global <span>Domination</span></h1>
+        <p>Don't just guess. <b>Know.</b> We use AI and Satellite Data to predict exactly where your business will succeed before you spend a single rupee.</p>
+        
+        <a href="/login" class="btn-cta">Launch Experience</a>
+
+        <div class="features">
+            <div class="card">
+                <span class="icon">📍</span>
+                <h3>Live Mapping</h3>
+                <span>Real-time competitor tracking using OSM data.</span>
+            </div>
+            <div class="card">
+                <span class="icon">🔍</span>
+                <h3>AI Prediction</h3>
+                <span>Smart algorithms score your success probability.</span>
+            </div>
+            <div class="card">
+                <span class="icon">🎯</span>
+                <h3>Market Gap</h3>
+                <span>Find the hidden opportunities others miss.</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

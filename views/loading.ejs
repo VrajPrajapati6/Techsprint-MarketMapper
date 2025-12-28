@@ -1,0 +1,125 @@
+<% layout('layouts/boilerplate') -%>
+
+<style>
+  .neural-load-container {
+    min-height: 75vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Modern Spinning Glow for Neural Edition */
+  .ai-spinner {
+    width: 100px;
+    height: 100px;
+    border: 3px solid rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    border-top-color: #a855f7;
+    border-left-color: #ec4899;
+    animation: spin-glow 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+  }
+
+  @keyframes spin-glow {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .loading-text {
+    margin-top: 30px;
+    letter-spacing: 2px;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    text-transform: uppercase;
+  }
+</style>
+
+<div class="neural-load-container">
+  <canvas
+    id="glitterCanvas"
+    style="
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    "
+  ></canvas>
+  <div class="ai-spinner"></div>
+
+  <div class="text-center mt-4">
+    <h3 class="text-white loading-text fw-bold">Neural Mapping...</h3>
+    <p class="text-secondary mt-2">
+      Retrieving fresh market intelligence for:<br />
+      <span class="text-info fw-bold">"<%= query %>"</span>
+    </p>
+  </div>
+
+  <form id="autoRerun" action="/result" method="POST" style="display: none">
+    <input type="hidden" name="query" value="<%= query %>" />
+    <input type="hidden" name="isRerun" value="<%= isRerun %>"/>
+  </form>
+</div>
+
+<script>
+  // Delay for 1.2 seconds so the user sees the animation, then auto-submits
+  window.onload = function () {
+    setTimeout(() => {
+      document.getElementById("autoRerun").submit();
+    }, 1200);
+  };
+
+  const canvas = document.getElementById("glitterCanvas");
+  const ctx = canvas.getContext("2d");
+
+  let particles = [];
+  const colors = ["#a855f7", "#ec4899", "#6366f1", "#3b82f6"]; // Your theme colors
+
+  function init() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    particles = [];
+    for (let i = 0; i < 90; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 4 + 1,
+        dx: (Math.random() - 0.5) * 0.8,
+        dy: (Math.random() - 0.5) * 0.8,
+        color: colors[Math.floor(Math.random() * colors.length)],
+      });
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach((p) => {
+      // Draw 3D-like shaded sphere
+      let gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+      gradient.addColorStop(0, "white");
+      gradient.addColorStop(0.4, p.color);
+      gradient.addColorStop(1, "transparent");
+
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Movement logic
+      p.x += p.dx;
+      p.y += p.dy;
+
+      // Bounce off edges
+      if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+    });
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener("resize", init);
+  init();
+  animate();
+</script>

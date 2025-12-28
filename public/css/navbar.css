@@ -1,0 +1,74 @@
+.mm-navbar {
+    width: 100%;
+    height: 64px;
+    background: #020617;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    border-bottom: 1px solid #1e293b;
+    z-index: 100;
+}
+
+/* Left section (logo) */
+.mm-nav-left {
+    display: flex;
+    align-items: center;
+}
+
+.mm-logo {
+    font-size: 20px;
+    font-weight: bold;
+    color: #22c55e;
+    text-decoration: none;
+}
+
+/* Right section */
+.mm-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Links */
+.mm-nav-link {
+    color: #cbd5f5;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+}
+
+.mm-nav-link:hover {
+    background: #1e293b;
+    color: #ffffff;
+}
+
+/* Highlighted "View History" */
+.mm-nav-link.history {
+    background: #2563eb;
+    color: #fff;
+    font-weight: 500;
+}
+
+.mm-nav-link.history:hover {
+    background: #1d4ed8;
+    color: #fff;
+}
+
+/* Sign Up button */
+.mm-nav-btn {
+    padding: 8px 16px;
+    background: #22c55e;
+    color: #020617;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+}
+
+.mm-nav-btn:hover {
+    background: #16a34a;
+    color: #fff;
+}

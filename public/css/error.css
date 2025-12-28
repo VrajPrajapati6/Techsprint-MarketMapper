@@ -1,0 +1,60 @@
+/* Reset & font */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Body setup */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column; /* navbar + content */
+    background: #0f172a;
+}
+
+/* Error container */
+.error-container {
+    flex: 1; /* takes remaining space below navbar */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 60px;
+    background: #020617;
+    border-radius: 12px;
+    margin: 40px auto; /* optional, to avoid sticking to edges */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    max-width: 500px; /* optional, for better layout */
+}
+
+/* Error code */
+.error-code {
+    font-size: 96px;
+    color: #ef4444;
+    margin-bottom: 10px;
+}
+
+/* Error message */
+.error-message {
+    font-size: 18px;
+    color: #e5e7eb;
+    margin-bottom: 25px;
+}
+
+/* Go Home button */
+.home-btn {
+    text-decoration: none;
+    padding: 10px 22px;
+    background: #2563eb;
+    color: #fff;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background 0.2s ease-in-out;
+}
+
+.home-btn:hover {
+    background: #1d4ed8;
+}
