@@ -8,7 +8,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
-  /* 1. GLOBAL & LAYOUT */
   body {
     overflow: hidden;
     background: #000;
@@ -22,7 +21,6 @@
     padding-top: 76px;
   }
 
-  /* 2. MAP STYLING */
   .map-pane {
     width: 50%;
     height: 100%;
@@ -34,7 +32,6 @@
     z-index: 1;
   }
 
-  /* 3. NEURAL CONTENT PANE (RIGHT SIDE) */
   .content-pane {
     width: 50%;
     height: 100%;
@@ -73,7 +70,6 @@
     border-radius: 10px;
   }
 
-  /* 4. COMPONENT HOVER EFFECTS  */
   .score-card,
   .stat-box,
   .swot-card,
@@ -189,7 +185,7 @@
           font-size: 0.7rem;
         "
       >
-        Neural Intelligence Report
+       Intelligence Report
       </h6>
       <h1 class="display-5 fw-bold text-white"><%= query %></h1>
     </div>
@@ -214,7 +210,7 @@
         class="text-white mb-3 small text-uppercase"
         style="letter-spacing: 1px"
       >
-        <i class="fa-solid fa-wand-magic-sparkles me-2 text-info"></i>Gemini
+        <i class="fa-solid fa-wand-magic-sparkles me-2 text-info"></i>AI
         Insight
       </h5>
       <div
@@ -241,7 +237,7 @@
       </div>
       <div class="col-6">
         <div class="stat-box">
-          <small class="text-secondary d-block mb-1">Avg Market Rating</small>
+          <small class="text-secondary d-block mb-1">Average Market Rating</small>
           <h3 class="text-warning mb-0">
             <%= data.average_market_rating || 0 %> ⭐
           </h3>
@@ -254,7 +250,7 @@
         class="text-white mb-4 small text-uppercase"
         style="letter-spacing: 1px"
       >
-        Neural SWOT Analysis
+        SWOT Analysis
       </h5>
       <div class="row g-3">
         <div class="col-md-6">
@@ -337,14 +333,12 @@
       const center = <%- JSON.stringify(data.center_coords || { lat: 23.0225, lng: 72.5714 }) %>;
       const competitors = <%- JSON.stringify(data.competitors || []) %>;
 
-      // Layer Definitions
       const dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png');
       const light = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png');
       const sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}');
 
       const map = L.map('map', { zoomControl: false, layers: [dark] }).setView([center.lat, center.lng], 14);
 
-      // Custom Stack Control Configuration
       const baseMaps = {
           "<span style='color: #a855f7;'>●</span> Dark Mode": dark,
           "<span style='color: #0dcaf0;'>●</span> Light Mode": light,
@@ -363,11 +357,9 @@
       const element = document.getElementById('report-content');
       const btn = document.getElementById('pdf-ignore');
 
-      // 1. Save original styles to restore them later
       const originalWidth = element.style.width;
       const originalBorder = element.style.borderLeft;
 
-      // 2. Prepare for capture: Force 100% width and hide button
       btn.style.display = 'none';
       element.style.width = '100%';
       element.style.borderLeft = 'none';
